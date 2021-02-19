@@ -6,13 +6,13 @@ import time
 from datetime import datetime
 from os.path import basename
 from zipfile import ZipFile
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
-# download_path = r"/home/dmr/" + datetime.now().strftime("%Y-%m-%d-%H%M%S")
-download_path = os.getcwd() +  "/" + datetime.now().strftime("%Y-%m-%d-%H%M%S")
+download_path = os.getcwd() + "/" + datetime.now().strftime("%Y-%m-%d-%H%M%S")
 
 
 def prep_folder():
@@ -52,7 +52,7 @@ def export_all():
 
 def login_clubdesk():
     user_input = driver.find_element_by_name('userId')
-    user_input.send_keys('dirk.rossel@psv-duebendorf.ch')
+    user_input.send_keys(getpass.getpass(prompt='Username:', stream=sys.stdout))
     pwd_input = driver.find_element_by_name('password')
     pwd_input.send_keys(getpass.getpass(prompt='Passwort:', stream=sys.stderr))
     submit_button = driver.find_element_by_name('submitButton')
@@ -96,16 +96,11 @@ def save_rechnungen():
     for k in kategorien:
         driver.find_element_by_xpath(k).click()
         time.sleep(5)
-        #     export_button = driver.find_element_by_xpath('/html/body/div[1]/div/div[3]/div/div[7]/div[2]/div/div[1]/div[1]/div/div/table[3]/tbody/tr[2]/td[2]/div/div/div/table/tbody/tr[1]/td/div/div/table/tbody/tr[2]/td[2]/div/div/table/tbody/tr/td[2]/div')
-        print('R4')
         export_button = WebDriverWait(driver, 60).until(EC.element_to_be_clickable((By.XPATH,
                                                                                     '/html/body/div[1]/div/div[3]/div/div[7]/div[2]/div/div[1]/div[1]/div/div/table[3]/tbody/tr[2]/td[2]/div/div/div/table/tbody/tr[1]/td/div/div/table/tbody/tr[2]/td[2]/div/div/table/tbody/tr/td[2]/div')))
-        print("Element is visible? " + str(export_button.is_displayed()))
         export_button.click()
         time.sleep(5)
-        print('R5')
         export_all()
-        print('R6')
 
 
 def save_buchhaltung():
@@ -142,6 +137,7 @@ chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument("--log-level=1")  # 3=fatal only
 chrome_options.add_argument("--headless")
 chrome_options.add_argument("--no-sandbox")
+chrome_options.add_argument("window-size=1920x1080")
 chrome_options.add_experimental_option("prefs", {
     "download.default_directory": download_path,
     "download.prompt_for_download": False,
@@ -170,7 +166,7 @@ print('Alle Kontakte:')
 save_mitglieder()
 time.sleep(1)
 print('Rechnungen:')
-# save_rechnungen()
+save_rechnungen()
 time.sleep(1)
 print('Buchhaltung:')
 save_buchhaltung()
