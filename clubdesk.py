@@ -52,7 +52,7 @@ def export_all():
 
 def login_clubdesk():
     user_input = driver.find_element_by_name('userId')
-    user_input.send_keys('dirk.rossel@psv-duebendorf.ch')
+    user_input.send_keys(getpass.getpass(prompt='User ID:', stream=sys.stderr))
     pwd_input = driver.find_element_by_name('password')
     pwd_input.send_keys(getpass.getpass(prompt='Passwort:', stream=sys.stderr))
     submit_button = driver.find_element_by_name('submitButton')
