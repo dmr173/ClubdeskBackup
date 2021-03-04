@@ -21,7 +21,7 @@ def prep_folder():
 
 
 def create_zip():
-    with ZipFile('backup.zip', 'w') as ZipObj:
+    with ZipFile('backup-'+ datetime.now().strftime("%Y-%m-%d-%H%M%S")+'.zip', 'w') as ZipObj:
         for folderName, subfolders, filenames in os.walk(download_path):
             for filename in filenames:
                 filePath = os.path.join(folderName, filename)
@@ -158,7 +158,7 @@ chrome_options.add_experimental_option("localState", chrome_local_state_prefs)
 driver = webdriver.Chrome(options=chrome_options)
 
 # driver.get('chrome://flags');
-driver.get('https://app.clubdesk.com/clubdesk/start?_ga=2.55198701.7561376.1612889610-1978372832.1542742166');
+driver.get('https://app.clubdesk.com/clubdesk/start?_ga=2.55198701.7561376.1612889610-1978372832.1542742166')
 
 login_clubdesk()
 time.sleep(1)
